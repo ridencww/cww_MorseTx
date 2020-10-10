@@ -7,13 +7,24 @@
  Morse Code.
 */
 
+// The next three lines are optional and are used to change the tone channel from the default of channel 0.
+//#ifdef ESP32
+//#define TONE_CHANNEL 15
+//#endif
+
 #include <cww_MorseTx.h>
 
 #define CW_SPEED 15
 
+#ifdef ESP32
+#define PIN_LED 2
+#define PIN_SND 16
+#define PIN_BTN 4
+#else
 #define PIN_LED 2
 #define PIN_SND 3
 #define PIN_BTN 4
+#endif
 
 #define TONE_FREQ 1000
 

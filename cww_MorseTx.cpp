@@ -152,8 +152,26 @@ void cww_MorseTx::send(char c) {
   delay(2 * _dotlen);
 }
 
-void cww_MorseTx::send(char* str) {
+void cww_MorseTx::send(const char* str) {
   while (*str) {
     send(*str++);
   }
 }
+
+#ifdef ESP32
+
+void tone(uint8_t pin, unsigned int frequency) {
+    if (ledcRead(TONE_CHANNEL)) {
+    //    log_e("Tone channel %d is already in use", ledcRead(TONE_CHANNEL));
+        return;
+    }
+    ledcAttachPin(pin, TONE_CHANNEL);
+    ledcWriteTone(TONE_CHANNEL, frequency);
+}
+
+void noTone(uint8_t pin) {
+    ledcDetachPin(pin);
+    ledcWrite(TONE_CHANNEL, 0);
+}
+
+#endif
