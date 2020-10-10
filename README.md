@@ -9,12 +9,26 @@ An example of the library's usage is included.
 
 
 ```c++
+// The next three lines are optional and are used to change the tone channel from the default of channel 0.
+//#ifdef ESP32
+//#define TONE_CHANNEL 15
+//#endif
+
 #include <cww_MorseTx.h>
 
 #define CW_SPEED 15
+
+#define TONE_FREQ 1000
+
+#ifdef ESP32
+#define PIN_LED 2
+#define PIN_SND 16
+#define PIN_BTN 4
+#else
 #define PIN_LED 2
 #define PIN_SND 3
-#define TONE_FREQ 1000
+#define PIN_BTN 4
+#endif
 
 // Construct a cww_MorseTx instance that will send Morse Code at 15 words
 // per minute on I/O pin 2. Output is active HIGH.
