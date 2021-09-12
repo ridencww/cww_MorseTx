@@ -3,6 +3,7 @@
 #include "cww_MorseTx.h"
 
 /*
+version 1.2.1: Ignore all non-Morse characters 
 version 1.2.0: Change speed to float type to support speeds less than 1 word per minute
 version 1.1.1: Isolate variables to support multiple instances. Fix divide by zero error when speed = 0
 version 1.1.0: ESP32 support. Fixed compiler warning about a constant to char* conversion.
@@ -130,6 +131,7 @@ void cww_MorseTx::dash() {
 }
 
 void cww_MorseTx::send(char c) {
+  byte o;
   byte morseByte;
   byte offset = (byte)c < 97 ? 0 : 32;
 
@@ -139,8 +141,14 @@ void cww_MorseTx::send(char c) {
     return;
   }
 
+  // Ignore offsets (non-Morse) characters
+  o = ((byte) c) - 33 - offset;
+  if (o > 63) {
+      o = 2; // a non-Morse character
+  }
+  
   // Take the ASCII and retrieve the equivalent Morse character
-  morseByte = _morsetable[((byte) c) - 33 - offset];
+  morseByte = _morsetable[o];
 
   // Output the CW character by rotating through the data byte
   while (morseByte != 1) {
