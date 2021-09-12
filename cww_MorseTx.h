@@ -13,6 +13,13 @@ void noTone(uint8_t pin);
 #endif
 
 class cww_MorseTx {
+  private:
+    int _dashlen;          // Length of dash
+    int _dotlen;           // Length of dot
+    int _freq;             // Tone frequency
+    bool _invert;          // true on=low else on=high  
+    byte _keypin;          // Pin for output keying
+    byte _sndpin;          // Sound pin  
   public:
     cww_MorseTx(byte keypin, byte speed, bool invert = false);
     cww_MorseTx(byte keypin, byte speed, byte sndpin, int freq = 1000, bool invert = false);

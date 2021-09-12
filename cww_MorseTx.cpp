@@ -2,12 +2,10 @@
 
 #include "cww_MorseTx.h"
 
-int _dashlen;          // Length of dash
-int _dotlen;           // Length of dot
-int _freq;             // Tone frequency
-int _invert;           // true on=low else on=high  
-byte _keypin;          // Pin for output keying
-byte _sndpin;          // Sound pin
+/*
+version 1.1.1: Isolate variables to support multiple instances. Fix divide by zero error when speed = 0
+version 1.1.0: ESP32 support. Fixed compiler warning about a constant to char* conversion.
+*/
 
 const byte _morsetable[] = { 
   B01110101, // !
@@ -79,6 +77,11 @@ const byte _morsetable[] = {
 cww_MorseTx::cww_MorseTx(byte keypin, byte speed, bool invert) {
   pinMode(keypin, OUTPUT);
   digitalWrite(keypin, invert ? HIGH : LOW);
+
+  // Avoid divide by zero error
+  if (speed == 0) {
+      speed = 1;
+  }
 
   _dotlen = 1200 / speed;
   _dashlen =  3 * _dotlen;
