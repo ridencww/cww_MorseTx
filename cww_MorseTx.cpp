@@ -3,8 +3,10 @@
 #include "cww_MorseTx.h"
 
 /*
+version 1.2.0: Change speed to float type to support speeds less than 1 word per minute
 version 1.1.1: Isolate variables to support multiple instances. Fix divide by zero error when speed = 0
 version 1.1.0: ESP32 support. Fixed compiler warning about a constant to char* conversion.
+version 1.0.0: Initial release
 */
 
 const byte _morsetable[] = { 
@@ -74,23 +76,23 @@ const byte _morsetable[] = {
   B01011110, // `
 };
 
-cww_MorseTx::cww_MorseTx(byte keypin, byte speed, bool invert) {
+cww_MorseTx::cww_MorseTx(byte keypin, float speed, bool invert) {
   pinMode(keypin, OUTPUT);
   digitalWrite(keypin, invert ? HIGH : LOW);
 
   // Avoid divide by zero error
-  if (speed == 0) {
+  if (speed == 0.0) {
       speed = 1;
   }
 
-  _dotlen = 1200 / speed;
+  _dotlen = 1200.0 / speed;
   _dashlen =  3 * _dotlen;
   _keypin = keypin;
   _invert = invert;
   _sndpin = 0;
 }
 
-cww_MorseTx::cww_MorseTx(byte keypin, byte speed, byte sndpin, int freq, bool invert) : cww_MorseTx(keypin, speed, invert) {
+cww_MorseTx::cww_MorseTx(byte keypin, float speed, byte sndpin, int freq, bool invert) : cww_MorseTx(keypin, speed, invert) {
   _sndpin = sndpin;
   _freq = freq;
 }
