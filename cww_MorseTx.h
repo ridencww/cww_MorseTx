@@ -2,14 +2,14 @@
 #define cww_MorseTx_h
 
 #ifdef ESP32
-
 #ifndef TONE_CHANNEL
 #define TONE_CHANNEL 0
 #endif
-
+// Only define tone/noTone for ESP32 platform 1.x (ESP_ARDUINO_VERSION_MAJOR added in 2.x)
+#ifndef ESP_ARDUINO_VERSION_MAJOR
 void tone(uint8_t pin, unsigned int frequency);
 void noTone(uint8_t pin);
-
+#endif
 #endif
 
 class cww_MorseTx {

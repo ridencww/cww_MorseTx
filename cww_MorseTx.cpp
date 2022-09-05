@@ -3,7 +3,7 @@
 #include "cww_MorseTx.h"
 
 /*
-version 1.2.1: Ignore all non-Morse characters 
+version 1.2.1: Ignore all non-Morse characters, support ESP32 v2.x+ that has tone/noTone 
 version 1.2.0: Change speed to float type to support speeds less than 1 word per minute
 version 1.1.1: Isolate variables to support multiple instances. Fix divide by zero error when speed = 0
 version 1.1.0: ESP32 support. Fixed compiler warning about a constant to char* conversion.
@@ -171,8 +171,9 @@ void cww_MorseTx::send(const char* str) {
   }
 }
 
+// Only define tone/noTone for ESP32 platform 1.x (ESP_ARDUINO_VERSION_MAJOR added in 2.x)
 #ifdef ESP32
-
+#ifndef ESP_ARDUINO_VERSION_MAJOR
 void tone(uint8_t pin, unsigned int frequency) {
     if (ledcRead(TONE_CHANNEL)) {
     //    log_e("Tone channel %d is already in use", ledcRead(TONE_CHANNEL));
@@ -186,5 +187,5 @@ void noTone(uint8_t pin) {
     ledcDetachPin(pin);
     ledcWrite(TONE_CHANNEL, 0);
 }
-
+#endif
 #endif
